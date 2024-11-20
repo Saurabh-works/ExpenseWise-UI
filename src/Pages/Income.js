@@ -21,8 +21,8 @@ const Income = () => {
       alert("Income added successfully!");
       setFormData({ date: "", day: "", category: "", description: "", amount: "" });
     } catch (error) {
-      console.error("Error adding income:", error);
-      alert("Failed to add income.");
+      console.error("Error adding income:", error.response || error.message || error);
+      alert(error.response?.data?.message || "Failed to add income.");
     }
   };
 
