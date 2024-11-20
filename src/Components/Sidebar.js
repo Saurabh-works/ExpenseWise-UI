@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, List, ListItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -7,12 +7,35 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import userImage from "../Assets/Avatar.png"; // Imported directly
+import axios from "axios";  // Import axios for making API requests
 
 const Sidebar = ({ onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();  // To get the current route
 
-  const [username, setUsername] = useState("Saurabh Shinde"); // Replace with dynamic data from user
+  const [username, setUsername] = useState(""); // State to store the username
+
+  // Retrieve the user's email from localStorage
+  const email = localStorage.getItem("userData");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!email) return;
+
+      try {
+        const response = await axios.get("http://localhost:5000/api/users", {
+          params: { email },  // Pass the email as a query parameter
+        });
+        setUsername(response.data.name || "Guest"); // Set username or default to "Guest"
+        console.log("this is response"+response);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setUsername("Guest");  // Fallback to "Guest" if there's an error
+      }
+    };
+
+    fetchUserData();
+  }, [email]);  // Only re-run effect if email changes
 
   const menuItems = [
     { label: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
@@ -67,7 +90,7 @@ const Sidebar = ({ onClose }) => {
           />
         </Box>
         <Typography variant="h6" color="#ffffff">
-          {username}
+          {username || "Guest"} {/* Default to "Guest" if username is empty */}
         </Typography>
       </Box>
 
