@@ -28,7 +28,7 @@ const DailySpends = () => {
 
   const fetchWeeklyData = async (email, selectedYear, selectedMonth, selectedWeek) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/daily-spends", {
+      const response = await axios.get("https://expense-wise-api.vercel.app/api/daily-spends", {
         params: {
           email,
           year: selectedYear,

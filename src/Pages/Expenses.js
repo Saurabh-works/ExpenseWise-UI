@@ -16,7 +16,7 @@ const Expenses = () => {
     const email = localStorage.getItem("userData"); // Get email from localStorage
 
     try {
-      await axios.post("http://localhost:5000/api/expenses/add", { ...formData, email });
+      await axios.post("https://expense-wise-api.vercel.app/api/expenses/add", { ...formData, email });
       alert("Expense added successfully!");
       setFormData({ date: "", day: "", category: "", description: "", amount: "" });
     } catch (error) {

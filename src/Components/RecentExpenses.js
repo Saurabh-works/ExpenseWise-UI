@@ -16,7 +16,7 @@ const RecentExpenses = () => {
 
       try {
         const currentMonth = new Date().getMonth() + 1; // 1-based month
-        const response = await axios.get("http://localhost:5000/api/recent-expenses", {
+        const response = await axios.get("https://expense-wise-api.vercel.app/api/recent-expenses", {
           params: { email },
         });
 

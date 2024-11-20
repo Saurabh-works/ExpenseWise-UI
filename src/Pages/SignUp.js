@@ -18,7 +18,7 @@ const SignUp = () => {
     console.log("Sending data:", { name, email, password });
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/signup", {
+      const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/signup", {
         name,
         email,
         password,

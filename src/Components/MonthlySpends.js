@@ -23,7 +23,7 @@ const MonthlySpends = () => {
         return;
       }
   
-      const response = await axios.get(`http://localhost:5000/api/monthly-spends`, {
+      const response = await axios.get(`https://expense-wise-api.vercel.app/api/monthly-spends`, {
         params: {
           email: email, // Pass email properly
           year: year,   // Pass the selected year

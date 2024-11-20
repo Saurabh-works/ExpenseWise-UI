@@ -33,7 +33,7 @@ const CurrentMonthPie = () => {
 
   const fetchMonthlyData = async (email, selectedYear, selectedMonth) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/current-month", {
+      const response = await axios.get("https://expense-wise-api.vercel.app/api/current-month", {
         params: {
           email: email,
           year: selectedYear,
