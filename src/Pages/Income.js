@@ -17,7 +17,7 @@ const Income = () => {
     console.log("Sending income data:", { ...formData, email });
 
     try {
-      await axios.post("http://localhost:5000/api/incomes/add", { ...formData, email });
+      await axios.post("https://expense-wise-api.vercel.app/api/incomes/add", { ...formData, email });
       alert("Income added successfully!");
       setFormData({ date: "", day: "", category: "", description: "", amount: "" });
     } catch (error) {
