@@ -5,6 +5,8 @@ import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
+// const API_BASE_URL = "http://localhost:5000" || "https://expense-wise-api.vercel.app";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const Login = () => {
     try {
       // const response = await axios.post("http://localhost:5000/api/auth/login", {
         const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/login", {
+        // const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password,
       });
