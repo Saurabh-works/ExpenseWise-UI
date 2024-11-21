@@ -42,6 +42,7 @@ const Report = () => {
         const response = await axios.get("https://expense-wise-api.vercel.app/api/reports", {
           params: { email, month, type },
         });
+        console.log("API Response:", response.data);
         setReportData(response.data);
       } catch (error) {
         console.error("Error fetching report data:", error.response?.data || error.message);
