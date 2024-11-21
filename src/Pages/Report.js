@@ -39,7 +39,7 @@ const Report = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5000/api/reports", {
+        const response = await axios.get("https://expense-wise-api.vercel.app/api/reports", {
           params: { email, month, type },
         });
         setReportData(response.data);
