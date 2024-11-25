@@ -49,7 +49,7 @@ const Header_Main = ({ toggleSidebar }) => {
                 component="div"
                 sx={{ fontWeight: "bold", color: "#F78D6A", marginLeft:{xs:"2px", md:"10px"}, fontSize:{xs:"100%", md:"150%"} }}
               >
-                ExpenseWise
+                <span style={{ color: "#F78D6A" }}>Expense</span>Wise
               </Typography>
             </Box>
 
