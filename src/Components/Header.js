@@ -44,7 +44,7 @@ const Header = () => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold", fontSize:{xs:"100%"} }}
+                sx={{ fontWeight: "bold", fontSize:{xs:"100%", md:"150%"}  }}
               >
                 <span style={{ color: "#F78D6A" }}>Expense</span>Wise
               </Typography>
