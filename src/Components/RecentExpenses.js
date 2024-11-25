@@ -17,6 +17,7 @@ const RecentExpenses = () => {
       try {
         const currentMonth = new Date().getMonth() + 1; // 1-based month
         const response = await axios.get("https://expense-wise-api.vercel.app/api/recent-expenses", {
+        // const response = await axios.get("http://localhost:5000/api/recent-expenses", {
           params: { email },
         });
 
@@ -32,27 +33,27 @@ const RecentExpenses = () => {
 
   return (
     <Box sx={{ padding: 4 }}>
-      <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
-        Recent Expenses
+      <Typography variant="h5" color="primary" sx={{ mb: 2, color:"white" }}>
+        Recent Expenses :
       </Typography>
       <TableContainer component={Paper}>
-        <Table>
+        <Table sx={{ backgroundColor: "#282826", border: "1px solid white" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Amount</TableCell>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>Date</TableCell>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>Category</TableCell>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>Description</TableCell>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {recentExpenses.length > 0 ? (
               recentExpenses.map((item) => (
                 <TableRow key={item._id}>
-                  <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
-                  <TableCell>{item.category}</TableCell>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell>{item.amount}</TableCell>
+                  <TableCell sx={{ color: "white" }}>{new Date(item.date).toLocaleDateString()}</TableCell>
+                  <TableCell sx={{ color: "white" }}>{item.category}</TableCell>
+                  <TableCell sx={{ color: "white" }}>{item.description}</TableCell>
+                  <TableCell sx={{ color: "white" }}>₹ {item.amount}</TableCell>
                 </TableRow>
               ))
             ) : (

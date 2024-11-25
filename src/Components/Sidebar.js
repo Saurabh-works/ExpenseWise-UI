@@ -24,6 +24,7 @@ const Sidebar = ({ onClose }) => {
 
       try {
         const response = await axios.get("https://expense-wise-api.vercel.app/api/users", {
+        // const response = await axios.get("http://localhost:5000/api/users", {
           params: { email },  // Pass the email as a query parameter
         });
         setUsername(response.data.name || "Guest"); // Set username or default to "Guest"

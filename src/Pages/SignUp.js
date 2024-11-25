@@ -19,10 +19,14 @@ const SignUp = () => {
 
     try {
       const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/signup", {
-        name,
-        email,
-        password,
-      });
+      // const response = await axios.post(
+      //   "http://localhost:5000/api/auth/signup",
+      //   {
+          name,
+          email,
+          password,
+        }
+      );
 
       console.log("Response received:", response.data);
 
@@ -57,7 +61,17 @@ const SignUp = () => {
           padding: { xs: "5%", sm: "3%", md: "2%" },
         }}
       >
-        <Typography variant="h4" color="#F78D6A" gutterBottom sx={{ borderBottom: "1px solid #F78D6A", marginBottom: 4, marginTop: -3 }}>
+        <Typography
+          variant="h4"
+          color="#F78D6A"
+          gutterBottom
+          sx={{
+            borderBottom: "1px solid #F78D6A",
+            marginBottom: 4,
+            marginTop: -3,
+            fontSize: { xs: "130%", sm: "130%" },
+          }}
+        >
           Sign Up
         </Typography>
 
@@ -82,7 +96,13 @@ const SignUp = () => {
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
             }}
           >
-            <video src={vid} autoPlay loop muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <video
+              src={vid}
+              autoPlay
+              loop
+              muted
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
           </Box>
 
           <TextField
@@ -142,8 +162,17 @@ const SignUp = () => {
             Submit
           </Button>
 
-          <Typography align="right" sx={{ mt: 2, color: "#ffffff", fontSize: "0.9rem" }}>
-            Already a member? <span style={{ color: "#F78D6A", cursor: "pointer" }} onClick={handleLoginClick}>Login</span>
+          <Typography
+            align="right"
+            sx={{ mt: 2, color: "#ffffff", fontSize: "0.9rem" }}
+          >
+            Already a member?{" "}
+            <span
+              style={{ color: "#F78D6A", cursor: "pointer" }}
+              onClick={handleLoginClick}
+            >
+              Login
+            </span>
           </Typography>
         </Box>
       </Container>

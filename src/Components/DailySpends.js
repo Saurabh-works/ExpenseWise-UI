@@ -7,7 +7,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const DailySpends = () => {
-  // Define getCurrentWeek above useState
   const getCurrentWeek = () => {
     const currentDate = new Date();
     const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
@@ -15,9 +14,9 @@ const DailySpends = () => {
     return Math.ceil((days + 1) / 7); // Calculate the current week number
   };
 
-  const [week, setWeek] = useState(getCurrentWeek()); // Default to current week
-  const [month, setMonth] = useState(new Date().getMonth() + 1); // Current month (1-based)
-  const [year, setYear] = useState(new Date().getFullYear()); // Current year
+  const [week, setWeek] = useState(getCurrentWeek());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
   const [dailyData, setDailyData] = useState([]);
   const [totalSpend, setTotalSpend] = useState(0);
   const email = localStorage.getItem("userData");
@@ -28,6 +27,7 @@ const DailySpends = () => {
 
   const fetchWeeklyData = async (email, selectedYear, selectedMonth, selectedWeek) => {
     try {
+      // const response = await axios.get("http://localhost:5000/api/daily-spends", {
       const response = await axios.get("https://expense-wise-api.vercel.app/api/daily-spends", {
         params: {
           email,
@@ -36,8 +36,6 @@ const DailySpends = () => {
           week: selectedWeek,
         },
       });
-
-      console.log("Weekly Spend Data:", response.data);
 
       setDailyData(response.data.dailySpends);
       setTotalSpend(response.data.totalSpend);
@@ -50,19 +48,57 @@ const DailySpends = () => {
     labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     datasets: [
       {
-        label: "Daily Spend ($)",
+        label: "Daily Spend ( ₹ )",
         data: dailyData,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        backgroundColor: "#F78D6A",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
     ],
   };
 
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "white", // Make legend text white
+        },
+      },
+      title: {
+        display: true,
+        text: `Daily Spend for Week ${week}, ${month} ${year}`,
+        color: "white", // Make title text white
+        font: {
+          size: 18,
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "white",
+        },
+        grid: {
+          color: "rgba(255, 255, 255, 0.2)",
+        },
+      },
+      y: {
+        ticks: {
+          color: "white",
+        },
+        grid: {
+          color: "rgba(255, 255, 255, 0.2)",
+        },
+      },
+    },
+  };
+
   return (
     <Box sx={{ padding: 4 }}>
-      <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
-        Weekly Spending
+      <Typography variant="h5" color="primary" sx={{ mb: 3, color: "white" }}>
+        Weekly Spending:
       </Typography>
 
       {/* Year, Month, Week Selector */}
@@ -71,6 +107,36 @@ const DailySpends = () => {
           label="Year"
           select
           value={year}
+          sx={{
+            color: "white",
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "gray",
+              },
+              "& .MuiSelect-select": {
+          color: "white", // Ensures the default selected value appears white
+        },
+              "&.Mui-focused fieldset": {
+                borderColor: "gray",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: "gray",
+            },
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "white",
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e",
+                  color: "white",
+                },
+              },
+            },
+          }}
           onChange={(e) => setYear(e.target.value)}
           fullWidth
         >
@@ -88,6 +154,36 @@ const DailySpends = () => {
           label="Month"
           select
           value={month}
+          sx={{
+            color: "white",
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "gray",
+              },
+              "& .MuiSelect-select": {
+          color: "white", // Ensures the default selected value appears white
+        },
+              "&.Mui-focused fieldset": {
+                borderColor: "gray",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: "gray",
+            },
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "white",
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e",
+                  color: "white",
+                },
+              },
+            },
+          }}
           onChange={(e) => setMonth(e.target.value)}
           fullWidth
         >
@@ -105,37 +201,56 @@ const DailySpends = () => {
           label="Week"
           select
           value={week}
+          sx={{
+            color: "white",
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "gray",
+              },
+              "& .MuiSelect-select": {
+          color: "white", // Ensures the default selected value appears white
+        },
+              "&.Mui-focused fieldset": {
+                borderColor: "gray",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: "gray",
+            },
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "white",
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e",
+                  color: "white",
+                },
+              },
+            },
+          }}
           onChange={(e) => setWeek(e.target.value)}
           fullWidth
         >
-          {[...Array(5)].map((_, i) => {
-            return (
-              <MenuItem key={i + 1} value={i + 1}>
-                Week {i + 1}
-              </MenuItem>
-            );
-          })}
+          {[...Array(5)].map((_, i) => (
+            <MenuItem key={i + 1} value={i + 1}>
+              Week {i + 1}
+            </MenuItem>
+          ))}
         </TextField>
       </Box>
 
       {/* Bar Chart */}
       <Box sx={{ mb: 4 }}>
-        <Bar
-          data={chartData}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: { position: "top" },
-              title: { display: true, text: `Daily Spend for Week ${week}, ${month} ${year}` },
-            },
-          }}
-        />
+        <Bar data={chartData} options={chartOptions} />
       </Box>
 
       {/* Total Spend */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6">Total Spend on Week {week}: ${totalSpend.toFixed(2)}</Typography>
-      </Box>
+      <Typography variant="h6" sx={{ color: "white" }}>
+      <span style={{color:"#F78D6A"}}>Total Spend in Week {week}: </span> ₹{totalSpend.toFixed(2)}
+      </Typography>
     </Box>
   );
 };

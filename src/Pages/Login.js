@@ -71,6 +71,7 @@ const Login = () => {
             borderBottom: "1px solid #F78D6A",
             marginBottom: 4,
             marginTop: -3,
+            fontSize:{xs:"130%", sm:"130%"}
           }}
         >
           Login

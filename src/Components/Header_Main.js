@@ -21,7 +21,7 @@ const Header_Main = ({ toggleSidebar }) => {
           bgcolor: "#282826",
           color: "#ffffff",
           width: "100%",
-          padding: { xs: "5%", sm: "3%", md: "2%" },
+          paddingY: { xs: "2%", sm: "2%", md: "2%" },
         }}
       >
         <AppBar
@@ -30,24 +30,24 @@ const Header_Main = ({ toggleSidebar }) => {
             bgcolor: "#282826",
             borderBottom: "2px solid #F78D6A",
             boxShadow: "none",
-            padding: { xs: "5px", sm: "1%" },
+            padding: { xs: "1px", sm: "1%" },
           }}
         >
           <Toolbar sx={{ justifyContent: "space-between" }}>
             {/* Sidebar Toggle Icon, Logo, and Website Name */}
             <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-              <IconButton edge="start" color="inherit" onClick={toggleSidebar} sx={{ marginRight: 1 }}>
-                <MenuIcon sx={{fontSize:40, color:"#F78D6A"}}/>
+              <IconButton edge="start" color="inherit" onClick={toggleSidebar} sx={{ marginRight: {xs:0, md:1} }}>
+                <MenuIcon sx={{fontSize:{sx:35, sm: 35, md:40, }, color:"#F78D6A"}}/>
               </IconButton>
               <img
                 src={logo}
                 alt="ExpenseWise Logo"
-                style={{ height: "40px", marginRight: "10px" }}
+                style={{ height: "40px"}}
               />
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold", color: "#F78D6A" }}
+                sx={{ fontWeight: "bold", color: "#F78D6A", marginLeft:{xs:"2px", md:"10px"}, fontSize:{xs:"100%", md:"150%"} }}
               >
                 ExpenseWise
               </Typography>
@@ -61,9 +61,10 @@ const Header_Main = ({ toggleSidebar }) => {
                 bgcolor: "#F78D6A",
                 color: "#ffffff",
                 fontWeight: "bold",
-                paddingY: 1,
-                paddingX: 3,
+                paddingY: {xs:"4px", md:1},
+                paddingX: {xs:"6px", md:3},
                 "&:hover": { bgcolor: "#a3644e" },
+                fontSize:{xs:"80%", sm:"80%", md:"90%"},
               }}
             >
               Logout

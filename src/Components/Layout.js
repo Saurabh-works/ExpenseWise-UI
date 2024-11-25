@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", position: "relative" }}>
+    <Box sx={{ display: "flex", minHeight: "100vh", position: "relative", bgcolor: "#383838" }}>
       {/* Sidebar */}
       {isSidebarOpen && (
         <Box
@@ -50,7 +50,7 @@ const Layout = ({ children }) => {
         <Header_Main toggleSidebar={toggleSidebar} />
 
         {/* Main Content */}
-        <Box component="main" sx={{ p: 3, bgcolor: "#f5f5f5" }} onClick={closeSidebar}>
+        <Box component="main" sx={{ p: 0, bgcolor: "#282826" }} onClick={closeSidebar}>
           {children}
         </Box>
 

@@ -30,7 +30,7 @@ const Header = () => {
             bgcolor: "#282826",
             borderBottom: "2px solid #F78D6A",
             boxShadow: 0,
-            padding: { xs: "5px", sm: "1%" },
+            padding: { xs: "3px", sm: "1%" },
           }}
         >
           <Toolbar>
@@ -44,7 +44,7 @@ const Header = () => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold" }}
+                sx={{ fontWeight: "bold", fontSize:{xs:"100%"} }}
               >
                 <span style={{ color: "#F78D6A" }}>Expense</span>Wise
               </Typography>

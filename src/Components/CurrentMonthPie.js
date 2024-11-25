@@ -24,7 +24,7 @@ const CurrentMonthPie = () => {
     "Personal Care": "#9966FF",
     Entertainment: "#FFB6C1",
     Shopping: "#FFD700",
-    Other: "#8A2BE2"
+    Other: "#8A2BE2",
   };
 
   useEffect(() => {
@@ -34,15 +34,19 @@ const CurrentMonthPie = () => {
   const fetchMonthlyData = async (email, selectedYear, selectedMonth) => {
     try {
       const response = await axios.get("https://expense-wise-api.vercel.app/api/current-month", {
-        params: {
-          email: email,
-          year: selectedYear,
-          month: selectedMonth,
-        },
-      });
+      // const response = await axios.get(
+      //   "http://localhost:5000/api/current-month",
+      //   {
+          params: {
+            email: email,
+            year: selectedYear,
+            month: selectedMonth,
+          },
+        }
+      );
 
       console.log("Current Month Data:", response.data);
-      
+
       const expensesData = response.data.expenses || [];
       const incomeData = response.data.income || [];
 
@@ -58,7 +62,9 @@ const CurrentMonthPie = () => {
       const chartDataset = Object.values(categoryData);
 
       // Set the colors for each category based on predefined colors
-      const chartColors = chartLabels.map(label => categoryColors[label] || "#808080"); // Default to gray if no color
+      const chartColors = chartLabels.map(
+        (label) => categoryColors[label] || "#808080"
+      ); // Default to gray if no color
 
       setPieData({
         labels: chartLabels,
@@ -73,21 +79,29 @@ const CurrentMonthPie = () => {
       });
 
       // Calculate total spends and earnings
-      const totalSpend = expensesData.reduce((acc, expense) => acc + expense.amount, 0);
-      const totalEarn = incomeData.reduce((acc, income) => acc + income.amount, 0);
+      const totalSpend = expensesData.reduce(
+        (acc, expense) => acc + expense.amount,
+        0
+      );
+      const totalEarn = incomeData.reduce(
+        (acc, income) => acc + income.amount,
+        0
+      );
 
       setTotalSpends(totalSpend);
       setTotalEarnings(totalEarn);
-
     } catch (error) {
-      console.error("Error fetching current month data:", error.response?.data || error.message);
+      console.error(
+        "Error fetching current month data:",
+        error.response?.data || error.message
+      );
     }
   };
 
   return (
     <Box sx={{ padding: 4 }}>
-      <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
-        Current Month Pie Chart
+      <Typography variant="h5" color="primary" sx={{ mb: 3, color: "white" }}>
+        Current Month Pie Chart:
       </Typography>
 
       {/* Year and Month Selector */}
@@ -96,6 +110,36 @@ const CurrentMonthPie = () => {
           label="Year"
           select
           value={year}
+          sx={{
+            color: "white",
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "gray",
+              },
+              "& .MuiSelect-select": {
+                color: "white", // Ensures the default selected value appears white
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "gray",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: "gray",
+            },
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "white",
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e",
+                  color: "white",
+                },
+              },
+            },
+          }}
           onChange={(e) => setYear(e.target.value)}
           fullWidth
         >
@@ -113,12 +157,52 @@ const CurrentMonthPie = () => {
           label="Month"
           select
           value={month}
+          sx={{
+            color: "white",
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "gray",
+              },
+              "& .MuiSelect-select": {
+                color: "white", // Ensures the default selected value appears white
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "gray",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: "gray",
+            },
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "white",
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e",
+                  color: "white",
+                },
+              },
+            },
+          }}
           onChange={(e) => setMonth(e.target.value)}
           fullWidth
         >
           {[
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December",
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
           ].map((monthName, index) => (
             <MenuItem key={index} value={index + 1}>
               {monthName}
@@ -127,24 +211,69 @@ const CurrentMonthPie = () => {
         </TextField>
       </Box>
 
-      {/* Pie Chart */}
-      <Box sx={{ mb: 4, width:"30%" }}>
-        <Pie
-          data={pieData}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: { position: "top" },
-              title: { display: true, text: `Expenses for ${month} ${year}` },
-            },
-          }}
-        />
+      {/* Pie Chart and Legend */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center", // Center vertically
+          justifyContent: "center", // Center horizontally
+          gap: 4, // Space between chart and legend
+        }}
+      >
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              color: "white",
+              textAlign: "left",
+            }}
+          >
+            {/* Custom legend content */}
+            {pieData.labels.map((label, index) => (
+              <Box
+                key={label}
+                sx={{ display: "flex", alignItems: "center", mb: 1 }}
+              >
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    backgroundColor:
+                      pieData.datasets[0]?.backgroundColor[index],
+                    borderRadius: "50%",
+                    mr: 1,
+                  }}
+                />
+                {label}
+              </Box>
+            ))}
+          </Typography>
+        </Box>
+
+        <Box sx={{ flex: 2, maxWidth: "40%" }}>
+          <Pie
+            data={pieData}
+            options={{
+              responsive: true,
+              plugins: {
+                legend: { display: false }, // Hide default legend
+                title: { display: true, text: `Expenses for ${month} ${year}` },
+              },
+            }}
+          />
+        </Box>
       </Box>
 
       {/* Total Spend and Earn */}
-      <Box sx={{ display: "flex", gap: 4 }}>
-        <Typography variant="h6">Total Spend: ${totalSpends.toFixed(2)}</Typography>
-        <Typography variant="h6">Total Earn: ${totalEarnings.toFixed(2)}</Typography>
+      <Box sx={{ justifyContent: "start", mt: 1 }}>
+        <Typography variant="h6" sx={{ color: "white" }}>
+          <span style={{ color: "#F78D6A" }}>Total Spend: </span> ₹
+          {totalSpends.toFixed(2)}
+        </Typography>
+        <Typography variant="h6" sx={{ color: "white" }}>
+          <span style={{ color: "#F78D6A" }}>Total Earn: </span> ₹
+          {totalEarnings.toFixed(2)}
+        </Typography>
       </Box>
     </Box>
   );

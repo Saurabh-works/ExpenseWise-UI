@@ -16,20 +16,16 @@ import placeholderImage from "../Assets/Home Page image new.png";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 
-
 const HomePage = () => {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    // Navigate to the login page
     navigate("/login");
   };
 
   const handleSignUpClick = () => {
-    // Navigate to the SignUp page
     navigate("/signup");
   };
-
 
   return (
     <>
@@ -38,7 +34,7 @@ const HomePage = () => {
           bgcolor: "#282826",
           color: "#ffffff",
           minHeight: "100vh",
-          padding: { xs: "5%", sm: "3%", md: "2%" }, // Responsive padding
+          padding: { xs: "5%", sm: "4%", md: "3%" },
         }}
       >
         <CssBaseline />
@@ -51,11 +47,11 @@ const HomePage = () => {
             borderBottom: "2px solid #ffffff",
             borderBottomColor: "#F78D6A",
             boxShadow: 0,
-            padding: { xs: "5px", sm: "1%" },
+            paddingX: { xs: "1px", sm: "15px", md: "20px" },
           }}
         >
           <Toolbar>
-            <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
+            <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center"}}>
               <img
                 src={logo}
                 alt="ExpenseWise Logo"
@@ -64,7 +60,10 @@ const HomePage = () => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold" }}
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: { xs: "1rem", sm: "1.5rem", md: "1.8rem" },
+                }}
               >
                 <span style={{ color: "#F78D6A" }}>Expense</span>Wise
               </Typography>
@@ -77,8 +76,10 @@ const HomePage = () => {
                 borderColor: "#F78D6A",
                 color: "#ffffff",
                 fontWeight: "bold",
-                marginRight: { xs: "5px", sm: "1%" },
+                fontSize: { xs: "0.6rem", sm: "1rem" },
+                marginRight: { xs: "5px", sm: "10px" },
                 "&:hover": { bgcolor: "#3A3A36" },
+                // width:{xs:"7px"}
               }}
             >
               Login
@@ -91,7 +92,9 @@ const HomePage = () => {
                 borderColor: "#F78D6A",
                 color: "#ffffff",
                 fontWeight: "bold",
+                fontSize: { xs: "0.6rem", sm: "1rem" },
                 "&:hover": { bgcolor: "#3A3A36" },
+                // width:{xs:"20px"}
               }}
             >
               Sign Up
@@ -100,7 +103,7 @@ const HomePage = () => {
         </AppBar>
 
         {/* Content */}
-        <Container sx={{ marginTop: { xs: "20px", sm: "50px" } }}>
+        <Container sx={{ marginTop: { xs: "20px", sm: "40px", md: "50px" } }}>
           <Grid
             container
             spacing={4}
@@ -108,14 +111,22 @@ const HomePage = () => {
             justifyContent="space-between"
           >
             {/* Left Section */}
-            <Grid item xs={12} md={6} sx={{ textAlign: "left" }}>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              sx={{
+                textAlign: { xs: "center", md: "left" },
+                paddingX: { xs: "1%", sm: "4%", md: "2%" },
+              }}
+            >
               <Typography
                 variant="h4"
                 component="h2"
                 gutterBottom
                 sx={{
                   fontWeight: "bold",
-                  fontSize: { xs: "1.8rem", sm: "2.5rem", md: "2.8rem" },
+                  fontSize: { xs: "1.5rem", sm: "2.2rem", md: "2.8rem" },
                 }}
               >
                 Transform the Way You Track Your Expenses With{" "}
@@ -128,7 +139,8 @@ const HomePage = () => {
                   lineHeight: 1.6,
                   marginBottom: 3,
                   fontStyle: "italic",
-                  fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
+                  fontSize: { xs: "1rem", sm: "1.1rem", md: "1.3rem" },
+                  
                 }}
               >
                 "Take control of your budget and achieve financial peace of
@@ -143,11 +155,11 @@ const HomePage = () => {
                   bgcolor: "#F78D6A",
                   color: "#ffffff",
                   fontWeight: "bold",
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
                   paddingX: { xs: 2, sm: 3 },
                   paddingY: { xs: 1, sm: 1.5 },
                   border: "1px solid transparent",
                   "&:hover": { bgcolor: "#a3644e", borderColor: "#ffffff" },
-                  
                 }}
               >
                 Let's Start
@@ -159,7 +171,11 @@ const HomePage = () => {
               item
               xs={12}
               md={6}
-              sx={{ display: "flex", justifyContent: "flex-end" }}
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "center", md: "flex-end" },
+                marginTop: { xs: "20px", md: "0px" },
+              }}
             >
               <Box
                 component="img"
@@ -176,7 +192,7 @@ const HomePage = () => {
           </Grid>
         </Container>
       </Box>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 };
