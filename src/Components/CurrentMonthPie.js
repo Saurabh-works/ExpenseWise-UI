@@ -94,6 +94,11 @@ const CurrentMonthPie = () => {
     } catch (error) {
       console.error("Error fetching current month data:", error.response?.data || error.message);
       setError("Failed to load data. Please try again.");
+
+      // Auto-close error alert after 5 seconds
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     } finally {
       setLoading(false); // Stop loading
     }

@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Alert } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Alert,
+  Snackbar
+} from "@mui/material";
 
 const RecentExpenses = () => {
   const [recentExpenses, setRecentExpenses] = useState([]);
   const [alertMessage, setAlertMessage] = useState(""); // State to handle alert message
   const [alertSeverity, setAlertSeverity] = useState(""); // State to handle severity (success/error)
+  const [openSnackbar, setOpenSnackbar] = useState(false); // State to handle Snackbar visibility
 
   useEffect(() => {
     const fetchRecentExpenses = async () => {
@@ -14,6 +27,7 @@ const RecentExpenses = () => {
       if (!email) {
         setAlertMessage("User not logged in.");
         setAlertSeverity("error");
+        setOpenSnackbar(true); // Show the Snackbar for error
         return;
       }
 
@@ -27,21 +41,32 @@ const RecentExpenses = () => {
         setRecentExpenses(response.data);
         setAlertMessage("Recent expenses fetched successfully!");
         setAlertSeverity("success");
+        setOpenSnackbar(true); // Show the Snackbar for success
       } catch (error) {
         console.error("Error fetching recent expenses:", error.response?.data || error.message);
         setAlertMessage(error.response?.data?.message || "Failed to fetch recent expenses.");
         setAlertSeverity("error");
+        setOpenSnackbar(true); // Show the Snackbar for error
       }
     };
 
     fetchRecentExpenses();
   }, []);
 
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false); // Close Snackbar when autoHideDuration expires or user manually closes
+  };
+
   return (
     <Box sx={{ padding: 4 }}>
-      {/* Alert message at the top-center */}
-      {alertMessage && (
+      {/* Snackbar with auto-close functionality */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000} // Auto-close after 6 seconds
+        onClose={handleSnackbarClose}
+      >
         <Alert
+          onClose={handleSnackbarClose}
           severity={alertSeverity} // 'success' or 'error'
           variant="outlined" // Outlined variant
           sx={{
@@ -54,9 +79,9 @@ const RecentExpenses = () => {
         >
           {alertMessage}
         </Alert>
-      )}
+      </Snackbar>
 
-      <Typography variant="h5" color="primary" sx={{ mb: 2, color:"white" }}>
+      <Typography variant="h5" color="primary" sx={{ mb: 2, color: "white" }}>
         Recent Expenses :
       </Typography>
       <TableContainer component={Paper}>

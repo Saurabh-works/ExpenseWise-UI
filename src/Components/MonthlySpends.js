@@ -38,6 +38,7 @@ const MonthlySpends = () => {
       if (!email) {
         setAlertMessage("User not logged in.");
         setAlertSeverity("error");
+        setTimeout(() => setAlertMessage(""), 5000); // Auto close after 5 seconds
         return;
       }
 
@@ -51,6 +52,7 @@ const MonthlySpends = () => {
       setData(response.data); // Set the data for charting
       setAlertMessage("Monthly data fetched successfully!");
       setAlertSeverity("success");
+      setTimeout(() => setAlertMessage(""), 5000); // Auto close after 5 seconds
     } catch (error) {
       console.error(
         "Error fetching monthly spend data:",
@@ -58,6 +60,7 @@ const MonthlySpends = () => {
       );
       setAlertMessage(error.response?.data?.message || "Failed to fetch monthly spends.");
       setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000); // Auto close after 5 seconds
     }
   };
 

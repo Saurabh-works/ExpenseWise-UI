@@ -42,10 +42,20 @@ const DailySpends = () => {
       setTotalSpend(response.data.totalSpend);
       setAlertMessage("Data fetched successfully!");
       setAlertSeverity("success");
+
+      // Auto-close alert after 5 seconds
+      setTimeout(() => {
+        setAlertMessage("");
+      }, 5000);
     } catch (error) {
       console.error("Error fetching daily spend data:", error.response?.data || error.message);
       setAlertMessage("Failed to fetch data. Please try again.");
       setAlertSeverity("error");
+
+      // Auto-close alert after 5 seconds
+      setTimeout(() => {
+        setAlertMessage("");
+      }, 5000);
     }
   };
 
