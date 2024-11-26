@@ -62,7 +62,7 @@ const RecentExpenses = () => {
       {/* Snackbar with auto-close functionality */}
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={3000} // Auto-close after 6 seconds
+        autoHideDuration={1000} // Auto-close after 6 seconds
         onClose={handleSnackbarClose}
       >
         <Alert
@@ -70,7 +70,7 @@ const RecentExpenses = () => {
           severity={alertSeverity} // 'success' or 'error'
           variant="outlined" // Outlined variant
           sx={{
-            width: "50%", // Smaller width
+            width: {xs:"70%", md:"50%", sm:"50%"}, // Smaller width
             margin: "10px auto", // Center it with margin
             fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
             borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
