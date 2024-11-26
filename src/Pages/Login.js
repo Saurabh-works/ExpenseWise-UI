@@ -46,6 +46,25 @@ const Login = () => {
 
   return (
     <>
+      <Box sx={{ position: "absolute", top: 0, width: "100%", zIndex: 1 }}>
+        {/* Alert message at the top-center, smaller, outlined */}
+        {alertMessage && (
+          <Alert
+            severity={alertSeverity} // 'success' or 'error'
+            variant="outlined" // Outlined variant
+            sx={{
+              width: "50%", // Smaller width
+              margin: "10px auto", // Center it with margin
+              fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
+              borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
+              color: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize text color based on severity
+            }}
+          >
+            {alertMessage}
+          </Alert>
+        )}
+      </Box>
+
       <Header />
       <Container
         maxWidth={false}
@@ -58,27 +77,8 @@ const Login = () => {
           minHeight: "100vh",
           bgcolor: "#282826",
           padding: { xs: "5%", sm: "3%", md: "2%" },
-          position: "relative", // Enable absolute positioning for the alert
         }}
       >
-        {/* Alert message at the top-center */}
-        {alertMessage && (
-          <Alert
-            severity={alertSeverity} // 'success' or 'error'
-            sx={{
-              position: "absolute",
-              top: "10%",
-              left: "50%",
-              transform: "translateX(-50%)", // Center it horizontally
-              width: "80%", // You can adjust width as needed
-              fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
-              zIndex: 1, // Ensure it's above other elements
-            }}
-          >
-            {alertMessage}
-          </Alert>
-        )}
-
         <Typography
           variant="h4"
           color="#F78D6A"
