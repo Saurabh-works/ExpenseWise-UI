@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, TextField, Button, Typography, MenuItem, Alert } from "@mui/material";
 
@@ -41,17 +41,43 @@ const Income = () => {
     }
   };
 
+  // Automatically close the alert after 2 seconds
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => setAlert(null), 2000);
+      return () => clearTimeout(timer); // Cleanup timer on unmount
+    }
+  }, [alert]);
+
   return (
     <Box
       sx={{
         backgroundColor: "#282826",
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         padding: { xs: 2, sm: 4, md: 6 },
       }}
     >
+      {/* Global Alert Header */}
+      {alert && (
+        <Alert
+          severity={alert.severity}
+          variant="outlined"
+          sx={{
+            position: "fixed",
+            top: 0,
+            width: "100%",
+            zIndex: 1200, // Ensure it stays on top
+            textAlign: "center",
+          }}
+        >
+          {alert.message}
+        </Alert>
+      )}
+
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -78,13 +104,6 @@ const Income = () => {
             Add Income
           </span>
         </Typography>
-
-        {/* Display Alert Message */}
-        {alert && (
-          <Alert severity={alert.severity} sx={{ marginBottom: 2 }}>
-            {alert.message}
-          </Alert>
-        )}
 
         {/* Date Input */}
         <TextField
@@ -199,8 +218,8 @@ const Income = () => {
 const responsiveInputStyle = {
   "& .MuiOutlinedInput-root": {
     "& .MuiSelect-select": {
-                    color: "white", // Ensures the default selected value appears white
-                  },
+      color: "white", // Ensures the default selected value appears white
+    },
     "& input": {
       color: "white", // Input text color
     },
