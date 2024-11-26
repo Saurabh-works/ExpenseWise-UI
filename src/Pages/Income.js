@@ -105,6 +105,16 @@ const Income = () => {
           fullWidth
           margin="normal"
           value={formData.day}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e", // Dark background for dropdown
+                  color: "white", // White text
+                },
+              },
+            },
+          }}
           onChange={(e) => setFormData({ ...formData, day: e.target.value })}
           sx={responsiveInputStyle}
         >
@@ -122,6 +132,16 @@ const Income = () => {
           fullWidth
           margin="normal"
           value={formData.category}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: "#3e3e3e", // Dark background for dropdown
+                  color: "white", // White text
+                },
+              },
+            },
+          }}
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           sx={responsiveInputStyle}
         >
