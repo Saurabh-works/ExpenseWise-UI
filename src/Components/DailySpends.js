@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, TextField, MenuItem } from "@mui/material";
+import { Box, Typography, TextField, MenuItem, Alert } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
@@ -19,6 +19,8 @@ const DailySpends = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [dailyData, setDailyData] = useState([]);
   const [totalSpend, setTotalSpend] = useState(0);
+  const [alertMessage, setAlertMessage] = useState(""); // Alert message state
+  const [alertSeverity, setAlertSeverity] = useState(""); // Alert severity state
   const email = localStorage.getItem("userData");
 
   useEffect(() => {
@@ -27,7 +29,6 @@ const DailySpends = () => {
 
   const fetchWeeklyData = async (email, selectedYear, selectedMonth, selectedWeek) => {
     try {
-      // const response = await axios.get("http://localhost:5000/api/daily-spends", {
       const response = await axios.get("https://expense-wise-api.vercel.app/api/daily-spends", {
         params: {
           email,
@@ -39,8 +40,12 @@ const DailySpends = () => {
 
       setDailyData(response.data.dailySpends);
       setTotalSpend(response.data.totalSpend);
+      setAlertMessage("Data fetched successfully!");
+      setAlertSeverity("success");
     } catch (error) {
       console.error("Error fetching daily spend data:", error.response?.data || error.message);
+      setAlertMessage("Failed to fetch data. Please try again.");
+      setAlertSeverity("error");
     }
   };
 
@@ -97,6 +102,23 @@ const DailySpends = () => {
 
   return (
     <Box sx={{ padding: 4 }}>
+      {/* Alert message at the top-center */}
+      {alertMessage && (
+        <Alert
+          severity={alertSeverity} // 'success' or 'error'
+          variant="outlined" // Outlined variant
+          sx={{
+            width: "50%", // Smaller width
+            margin: "10px auto", // Center it with margin
+            fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
+            borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
+            color: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize text color based on severity
+          }}
+        >
+          {alertMessage}
+        </Alert>
+      )}
+
       <Typography variant="h5" color="primary" sx={{ mb: 3, color: "white" }}>
         Weekly Spending:
       </Typography>
@@ -114,8 +136,8 @@ const DailySpends = () => {
                 borderColor: "gray",
               },
               "& .MuiSelect-select": {
-          color: "white", // Ensures the default selected value appears white
-        },
+                color: "white", // Ensures the default selected value appears white
+              },
               "&.Mui-focused fieldset": {
                 borderColor: "gray",
               },
@@ -161,8 +183,8 @@ const DailySpends = () => {
                 borderColor: "gray",
               },
               "& .MuiSelect-select": {
-          color: "white", // Ensures the default selected value appears white
-        },
+                color: "white", // Ensures the default selected value appears white
+              },
               "&.Mui-focused fieldset": {
                 borderColor: "gray",
               },
@@ -208,8 +230,8 @@ const DailySpends = () => {
                 borderColor: "gray",
               },
               "& .MuiSelect-select": {
-          color: "white", // Ensures the default selected value appears white
-        },
+                color: "white", // Ensures the default selected value appears white
+              },
               "&.Mui-focused fieldset": {
                 borderColor: "gray",
               },
@@ -249,7 +271,7 @@ const DailySpends = () => {
 
       {/* Total Spend */}
       <Typography variant="h6" sx={{ color: "white" }}>
-      <span style={{color:"#F78D6A"}}>Total Spend in Week {week}: </span> ₹{totalSpend.toFixed(2)}
+        <span style={{color:"#F78D6A"}}>Total Spend in Week {week}: </span> ₹{totalSpend.toFixed(2)}
       </Typography>
     </Box>
   );

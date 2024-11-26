@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import vid from "../Assets/Black Hat 3D Animated Icon (2).mp4";
-import { Box, TextField, Button, Typography, Container } from "@mui/material";
+import { Box, TextField, Button, Typography, Container, Alert } from "@mui/material";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
@@ -11,33 +11,31 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [alertMessage, setAlertMessage] = useState(""); // State for alert message
+  const [alertSeverity, setAlertSeverity] = useState(""); // State for alert severity
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Sending data:", { name, email, password });
-
     try {
       const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/signup", {
-      // const response = await axios.post(
-      //   "http://localhost:5000/api/auth/signup",
-      //   {
-          name,
-          email,
-          password,
-        }
-      );
-
-      console.log("Response received:", response.data);
+        name,
+        email,
+        password,
+      });
 
       if (response.data.message === "User created successfully") {
+        setAlertMessage("Sign Up Successful!");
+        setAlertSeverity("success");
         navigate("/login");
       } else {
-        alert(response.data.message);
+        setAlertMessage(response.data.message || "An error occurred during signup.");
+        setAlertSeverity("error");
       }
     } catch (error) {
       console.error("Error occurred:", error);
-      alert("An error occurred during signup. Please try again.");
+      setAlertMessage("An error occurred during signup. Please try again.");
+      setAlertSeverity("error");
     }
   };
 
@@ -47,6 +45,25 @@ const SignUp = () => {
 
   return (
     <>
+      <Box sx={{ position: "absolute", top: 0, width: "100%", zIndex: 1 }}>
+        {/* Alert message at the top-center, smaller, outlined */}
+        {alertMessage && (
+          <Alert
+            severity={alertSeverity} // 'success' or 'error'
+            variant="outlined" // Outlined variant
+            sx={{
+              width: "50%", // Smaller width
+              margin: "10px auto", // Center it with margin
+              fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
+              borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
+              color: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize text color based on severity
+            }}
+          >
+            {alertMessage}
+          </Alert>
+        )}
+      </Box>
+
       <Header />
       <Container
         maxWidth={false}

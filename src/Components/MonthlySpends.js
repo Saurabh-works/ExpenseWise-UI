@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, TextField, MenuItem, colors } from "@mui/material";
+import { Box, Typography, TextField, MenuItem, Alert } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -24,6 +24,8 @@ ChartJS.register(
 const MonthlySpends = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [data, setData] = useState([]);
+  const [alertMessage, setAlertMessage] = useState(""); // State to handle alert message
+  const [alertSeverity, setAlertSeverity] = useState(""); // State to handle severity (success/error)
   const email = localStorage.getItem("userData");
 
   useEffect(() => {
@@ -34,27 +36,28 @@ const MonthlySpends = () => {
     try {
       const email = localStorage.getItem("userData"); // Ensure you get email from localStorage
       if (!email) {
-        console.error("User email not found in localStorage.");
+        setAlertMessage("User not logged in.");
+        setAlertSeverity("error");
         return;
       }
 
       const response = await axios.get(`https://expense-wise-api.vercel.app/api/monthly-spends`, {
-      // const response = await axios.get(
-      //   `http://localhost:5000/api/monthly-spends`,
-      //   {
-          params: {
-            email: email, // Pass email properly
-            year: year, // Pass the selected year
-          },
-        }
-      );
+        params: {
+          email: email, // Pass email properly
+          year: year, // Pass the selected year
+        },
+      });
       console.log("Monthly Spend Data:", response.data);
       setData(response.data); // Set the data for charting
+      setAlertMessage("Monthly data fetched successfully!");
+      setAlertSeverity("success");
     } catch (error) {
       console.error(
         "Error fetching monthly spend data:",
         error.response?.data || error.message
       );
+      setAlertMessage(error.response?.data?.message || "Failed to fetch monthly spends.");
+      setAlertSeverity("error");
     }
   };
 
@@ -124,6 +127,23 @@ const MonthlySpends = () => {
 
   return (
     <Box sx={{ padding: 4 }}>
+      {/* Alert message at the top-center */}
+      {alertMessage && (
+        <Alert
+          severity={alertSeverity} // 'success' or 'error'
+          variant="outlined" // Outlined variant
+          sx={{
+            width: "50%", // Smaller width
+            margin: "10px auto", // Center it with margin
+            fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
+            borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
+            color: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize text color based on severity
+          }}
+        >
+          {alertMessage}
+        </Alert>
+      )}
+
       <Typography variant="h5" color="primary" sx={{ mb: 3, color: "white" }}>
         Monthly Spends :
       </Typography>
@@ -138,9 +158,6 @@ const MonthlySpends = () => {
             color: "white",
             marginRight: 2,
             "& .MuiOutlinedInput-root": {
-              // "& fieldset": {
-              //   borderColor: "gray", // Default border color
-              // },
               "& .MuiSelect-select": {
                 color: "white", // Ensures the default selected value appears white
               },

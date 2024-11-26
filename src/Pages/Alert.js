@@ -13,6 +13,9 @@ import {
   TableHead,
   TableRow,
   Paper,
+  CircularProgress,
+  Snackbar,
+  Alert as MuiAlert,
 } from "@mui/material";
 
 const Alert = () => {
@@ -20,37 +23,40 @@ const Alert = () => {
   const [time, setTime] = useState("");
   const [day, setDay] = useState("");
   const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   useEffect(() => {
     fetchAlerts();
   }, []);
 
   const fetchAlerts = async () => {
+    setLoading(true);
     const userEmail = localStorage.getItem("userData");
-    // const userEmail = "saurabhshindework@gmail.com";
     if (!userEmail) {
       console.error("User email not found. Please log in.");
       return;
     }
 
     try {
-      // const { data } = await axios.get("http://localhost:5000/api/alerts", {
       const { data } = await axios.get("https://expense-wise-api.vercel.app/api/alerts", {
         params: { userEmail },
       });
       setAlerts(data);
     } catch (error) {
-      console.error(
-        "Error fetching alerts:",
-        error.response?.data || error.message
-      );
+      console.error("Error fetching alerts:", error.response?.data || error.message);
+      setSnackbarMessage("Error fetching alerts.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleScheduleAlert = async () => {
     const userEmail = localStorage.getItem("userData");
-    console.log("Retrieved userEmail:", userEmail);
-
     if (!userEmail) {
       alert("User email not found. Please log in.");
       return;
@@ -61,6 +67,7 @@ const Alert = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const payload = {
         userEmail,
@@ -68,30 +75,41 @@ const Alert = () => {
         time,
         day: alertType !== "daily" ? day : null,
       };
-      // await axios.post("http://localhost:5000/api/alerts", payload);
       await axios.post("https://expense-wise-api.vercel.app/api/alerts", payload);
       fetchAlerts();
-      alert("Alert scheduled successfully!");
+      setSnackbarMessage("Alert scheduled successfully!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
     } catch (error) {
-      console.error(
-        "Error scheduling alert:",
-        error.response?.data || error.message
-      );
+      console.error("Error scheduling alert:", error.response?.data || error.message);
+      setSnackbarMessage("Error scheduling alert.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteAlert = async (id) => {
+    setLoading(true);
     try {
-      // await axios.delete(`http://localhost:5000/api/alerts/${id}`);
       await axios.delete(`https://expense-wise-api.vercel.app/api/alerts/${id}`);
       fetchAlerts();
-      alert("Alert deleted successfully!");
+      setSnackbarMessage("Alert deleted successfully!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
     } catch (error) {
-      console.error(
-        "Error deleting alert:",
-        error.response?.data || error.message
-      );
+      console.error("Error deleting alert:", error.response?.data || error.message);
+      setSnackbarMessage("Error deleting alert.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
   };
 
   const responsiveInputStyle = {
@@ -136,25 +154,7 @@ const Alert = () => {
               },
             },
           }}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "&:hover fieldset": {
-                borderColor: "gray", // Border color on hover
-              },
-              "& .MuiSelect-select": {
-                color: "white", // Ensures the default selected value appears white
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "gray", // Border color when focused
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "gray", // Default label color
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: "white", // Label color when focused
-            },
-          }}
+          sx={responsiveInputStyle}
         >
           <MenuItem value="daily">Daily</MenuItem>
           <MenuItem value="weekly">Weekly</MenuItem>
@@ -167,7 +167,7 @@ const Alert = () => {
             value={day}
             onChange={(e) => setDay(e.target.value)}
             fullWidth
-            sx={{ "& .MuiInputBase-root": { color: "white" } }}
+            sx={responsiveInputStyle}
             SelectProps={{
               MenuProps: {
                 PaperProps: {
@@ -207,25 +207,7 @@ const Alert = () => {
           onChange={(e) => setTime(e.target.value)}
           fullWidth
           InputLabelProps={{ shrink: true }}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "&:hover fieldset": {
-                borderColor: "gray", // Border color on hover
-              },
-              "& .MuiSelect-select": {
-                color: "white", // Ensures the default selected value appears white
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "gray", // Border color when focused
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "gray", // Default label color
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: "white", // Label color when focused
-            },
-          }}
+          sx={responsiveInputStyle}
         />
       </Box>
       <Button
@@ -240,16 +222,13 @@ const Alert = () => {
           "&:hover": { bgcolor: "#a3644e" },
         }}
       >
-        Schedule Alert
+        {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Schedule Alert"}
       </Button>
 
       <Typography variant="h6" sx={{ mt: 4, mb: 2, color: "#F78D6A" }}>
         Alerts History:
       </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{ backgroundColor: "#2c2c2c", color: "white" }}
-      >
+      <TableContainer component={Paper} sx={{ backgroundColor: "#2c2c2c", color: "white" }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -261,10 +240,7 @@ const Alert = () => {
           </TableHead>
           <TableBody>
             {alerts.map((alert) => (
-              <TableRow
-                key={alert._id}
-                sx={{ "&:hover": { backgroundColor: "#444" } }}
-              >
+              <TableRow key={alert._id} sx={{ "&:hover": { backgroundColor: "#444" } }}>
                 <TableCell sx={{ color: "white" }}>{alert.type}</TableCell>
                 <TableCell sx={{ color: "white" }}>
                   {alert.type === "weekly"
@@ -285,6 +261,7 @@ const Alert = () => {
                     variant="contained"
                     color="error"
                     onClick={() => handleDeleteAlert(alert._id)}
+                    disabled={loading}
                   >
                     Delete
                   </Button>
@@ -294,11 +271,23 @@ const Alert = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Snackbar for success or error messages */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 };
 
 export default Alert;
-
-
-

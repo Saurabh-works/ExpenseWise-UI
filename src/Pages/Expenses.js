@@ -10,19 +10,23 @@ const Expenses = () => {
     description: "",
     amount: "",
   });
+  const [alert, setAlert] = useState(null); // To handle success or error messages
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = localStorage.getItem("userData"); // Get email from localStorage
 
     try {
-      // await axios.post("http://localhost:5000/api/expenses/add", {
-        await axios.post("https://expense-wise-api.vercel.app/api/expenses/add", {
+      // Send the form data to the backend
+      await axios.post("https://expense-wise-api.vercel.app/api/expenses/add", {
         ...formData,
         email,
       });
-      // alert("Expense added successfully!");
-      <Alert severity="success">Expense added successfully!</Alert>
+      
+      // Set success alert
+      setAlert({ message: "Expense added successfully!", severity: "success" });
+
+      // Reset form data
       setFormData({
         date: "",
         day: "",
@@ -32,9 +36,8 @@ const Expenses = () => {
       });
     } catch (error) {
       console.error("Error adding expense:", error);
-      // alert("Failed to add expense.");
-      <Alert severity="error">Failed to add expense</Alert>
-
+      // Set error alert
+      setAlert({ message: "Failed to add expense.", severity: "error" });
     }
   };
 
@@ -68,14 +71,20 @@ const Expenses = () => {
             marginBottom: 3,
             fontSize: { xs: "1.2rem", sm: "1.5rem" },
             fontWeight: "bold",
-            borderBottomColor:"#F78D6A",
+            borderBottomColor: "#F78D6A",
           }}
         >
-          <span style={{ borderBottom: "1px solid #F78D6A", margin: "auto", paddingBottom:"2px" }}>
-            {" "}
+          <span style={{ borderBottom: "1px solid #F78D6A", margin: "auto", paddingBottom: "2px" }}>
             Add Expense
           </span>
         </Typography>
+
+        {/* Display Alert Message */}
+        {alert && (
+          <Alert severity={alert.severity} sx={{ marginBottom: 2 }}>
+            {alert.message}
+          </Alert>
+        )}
 
         {/* Date Input */}
         <TextField
@@ -98,16 +107,6 @@ const Expenses = () => {
           value={formData.day}
           onChange={(e) => setFormData({ ...formData, day: e.target.value })}
           sx={responsiveInputStyle}
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                sx: {
-                  backgroundColor: "#3e3e3e",
-                  color: "white",
-                },
-              },
-            },
-          }}
         >
           {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
             <MenuItem key={day} value={day}>
@@ -123,20 +122,8 @@ const Expenses = () => {
           fullWidth
           margin="normal"
           value={formData.category}
-          onChange={(e) =>
-            setFormData({ ...formData, category: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           sx={responsiveInputStyle}
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                sx: {
-                  backgroundColor: "#3e3e3e",
-                  color: "white",
-                },
-              },
-            },
-          }}
         >
           {[
             "Housing",
@@ -161,9 +148,7 @@ const Expenses = () => {
           fullWidth
           margin="normal"
           value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           sx={responsiveInputStyle}
         />
 
@@ -206,9 +191,6 @@ const responsiveInputStyle = {
     "& input": {
       color: "white", // Input text color
     },
-    // "& fieldset": {
-    //   borderColor: "gray", // Default border color
-    // },
     "&:hover fieldset": {
       borderColor: "gray", // Border color on hover
     },

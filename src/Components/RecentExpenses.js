@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Alert } from "@mui/material";
 
 const RecentExpenses = () => {
   const [recentExpenses, setRecentExpenses] = useState([]);
+  const [alertMessage, setAlertMessage] = useState(""); // State to handle alert message
+  const [alertSeverity, setAlertSeverity] = useState(""); // State to handle severity (success/error)
 
   useEffect(() => {
     const fetchRecentExpenses = async () => {
       const email = localStorage.getItem("userData");
 
       if (!email) {
-        alert("User not logged in.");
-        return; 
+        setAlertMessage("User not logged in.");
+        setAlertSeverity("error");
+        return;
       }
 
       try {
@@ -22,9 +25,12 @@ const RecentExpenses = () => {
         });
 
         setRecentExpenses(response.data);
+        setAlertMessage("Recent expenses fetched successfully!");
+        setAlertSeverity("success");
       } catch (error) {
         console.error("Error fetching recent expenses:", error.response?.data || error.message);
-        alert(error.response?.data?.message || "Failed to fetch recent expenses.");
+        setAlertMessage(error.response?.data?.message || "Failed to fetch recent expenses.");
+        setAlertSeverity("error");
       }
     };
 
@@ -33,6 +39,23 @@ const RecentExpenses = () => {
 
   return (
     <Box sx={{ padding: 4 }}>
+      {/* Alert message at the top-center */}
+      {alertMessage && (
+        <Alert
+          severity={alertSeverity} // 'success' or 'error'
+          variant="outlined" // Outlined variant
+          sx={{
+            width: "50%", // Smaller width
+            margin: "10px auto", // Center it with margin
+            fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
+            borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
+            color: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize text color based on severity
+          }}
+        >
+          {alertMessage}
+        </Alert>
+      )}
+
       <Typography variant="h5" color="primary" sx={{ mb: 2, color:"white" }}>
         Recent Expenses :
       </Typography>
