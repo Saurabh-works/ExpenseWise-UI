@@ -69,7 +69,7 @@ const Income = () => {
           sx={{
             position: "fixed",
             top: 0,
-            width: "100%",
+            width: "30%",
             zIndex: 1200, // Ensure it stays on top
             textAlign: "center",
           }}
