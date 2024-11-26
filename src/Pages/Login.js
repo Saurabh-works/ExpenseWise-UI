@@ -5,42 +5,38 @@ import { Box, TextField, Button, Typography, Container, Alert } from "@mui/mater
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
-// const API_BASE_URL = "http://localhost:5000" || "https://expense-wise-api.vercel.app";
-
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState(""); // State to handle alert message
+  const [alertSeverity, setAlertSeverity] = useState(""); // State to handle severity (success/error)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Sending login data:", { email, password });
-
     try {
-      // const response = await axios.post("http://localhost:5000/api/auth/login", {
-        const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/login", {
-        // const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+      const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/login", {
         email,
         password,
       });
 
-      console.log("Login response:", response.data);
-
       // Check for success message
       if (response.data.message === "Login successful") {
-        navigate("/dashboard"); // Navigate to dashboard on successful login
-        // alert("Login is Successful....");
-        <Alert severity="success">Login is Successful....</Alert>
+        setAlertMessage("Login Successful!");
+        setAlertSeverity("success");
+        navigate("/dashboard");
         localStorage.setItem("userData", email);
       } else {
-        setErrorMessage(response.data.message || "An error occurred during login.");
+        setAlertMessage(response.data.message || "An error occurred during login.");
+        setAlertSeverity("error");
       }
     } catch (error) {
-      console.error("Login error:", error);
       setErrorMessage("An error occurred during login. Please try again.");
+      setAlertMessage("Login Failed");
+      setAlertSeverity("error");
     }
   };
 
@@ -72,7 +68,7 @@ const Login = () => {
             borderBottom: "1px solid #F78D6A",
             marginBottom: 4,
             marginTop: -3,
-            fontSize:{xs:"130%", sm:"130%"}
+            fontSize: { xs: "130%", sm: "130%" },
           }}
         >
           Login
@@ -128,13 +124,19 @@ const Login = () => {
             sx={{ input: { color: "#ffffff" }, bgcolor: "#4A4A4A", borderRadius: 1 }}
           />
 
-          {errorMessage && (
-            <Typography
-              color="error"
-              sx={{ mt: 2, fontSize: "0.9rem", textAlign: "center" }}
+          {alertMessage && (
+            <Alert
+              severity={alertSeverity} // 'success' or 'error'
+              sx={{
+                mt: 2,
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" }, // responsive font size
+              }}
             >
-              {errorMessage}
-            </Typography>
+              {alertMessage}
+            </Alert>
           )}
 
           <Button
