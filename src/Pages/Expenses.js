@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Box, TextField, Button, Typography, MenuItem, Alert } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  MenuItem,
+  Alert,
+  Snackbar,
+} from "@mui/material";
 
 const Expenses = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +30,7 @@ const Expenses = () => {
         ...formData,
         email,
       });
-      
+
       // Set success alert
       setAlert({ message: "Expense added successfully!", severity: "success" });
 
@@ -41,17 +49,45 @@ const Expenses = () => {
     }
   };
 
+  // Automatically close alert after 2 seconds
+  React.useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => setAlert(null), 2000); // 2000ms = 2 seconds
+      return () => clearTimeout(timer); // Cleanup on unmount or re-trigger
+    }
+  }, [alert]);
+
   return (
     <Box
       sx={{
         backgroundColor: "#282826",
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
         padding: { xs: 2, sm: 4, md: 6 },
       }}
     >
+      {/* Display Alert at Top */}
+      {alert && (
+        <Snackbar
+          open={Boolean(alert)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            severity={alert.severity}
+            variant="outlined"
+            sx={{
+              width: "100%",
+              backgroundColor: "#383838", // Optional: Match form styling
+              color: "white",
+            }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      )}
+
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -61,6 +97,7 @@ const Expenses = () => {
           borderRadius: 2,
           backgroundColor: "#383838",
           boxShadow: 3,
+          marginTop: 4, // Add spacing to avoid alert overlap
         }}
       >
         <Typography
@@ -74,17 +111,16 @@ const Expenses = () => {
             borderBottomColor: "#F78D6A",
           }}
         >
-          <span style={{ borderBottom: "1px solid #F78D6A", margin: "auto", paddingBottom: "2px" }}>
+          <span
+            style={{
+              borderBottom: "1px solid #F78D6A",
+              margin: "auto",
+              paddingBottom: "2px",
+            }}
+          >
             Add Expense
           </span>
         </Typography>
-
-        {/* Display Alert Message */}
-        {alert && (
-          <Alert severity={alert.severity} sx={{ marginBottom: 2 }}>
-            {alert.message}
-          </Alert>
-        )}
 
         {/* Date Input */}
         <TextField
@@ -118,9 +154,9 @@ const Expenses = () => {
           onChange={(e) => setFormData({ ...formData, day: e.target.value })}
           sx={responsiveInputStyle}
         >
-          {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
-            <MenuItem key={day} value={day}>
-              {day}
+          {[...Array(7).keys()].map((index) => (
+            <MenuItem key={index} value={["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][index]}>
+              {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][index]}
             </MenuItem>
           ))}
         </TextField>
@@ -142,7 +178,9 @@ const Expenses = () => {
               },
             },
           }}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, category: e.target.value })
+          }
           sx={responsiveInputStyle}
         >
           {[
@@ -168,7 +206,9 @@ const Expenses = () => {
           fullWidth
           margin="normal"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
           sx={responsiveInputStyle}
         />
 
@@ -209,8 +249,8 @@ const Expenses = () => {
 const responsiveInputStyle = {
   "& .MuiOutlinedInput-root": {
     "& .MuiSelect-select": {
-                    color: "white", // Ensures the default selected value appears white
-                  },
+      color: "white", // Ensures the default selected value appears white
+    },
     "& input": {
       color: "white", // Input text color
     },
