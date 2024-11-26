@@ -14,8 +14,6 @@ import {
   TableRow,
   Paper,
   IconButton,
-  CircularProgress,
-  Alert,
 } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos, Print } from "@mui/icons-material"; // For pagination icons
 
@@ -28,8 +26,6 @@ const Report = () => {
   const [reportData, setReportData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0); // Pagination
   const [rowsPerPage, setRowsPerPage] = useState(5); // Rows per page (default is 5)
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error handling state
 
   // Function to calculate total amount
   const calculateTotal = () => {
@@ -39,26 +35,26 @@ const Report = () => {
   // Fetch data for the default month and type when the component loads
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Start loading
-      setError(null); // Reset error state
       const email = localStorage.getItem("userData");
 
       if (!email) {
-        setError("No user data found.");
-        setLoading(false); // Stop loading
+        alert("No user data found.");
         return;
       }
 
       try {
         const response = await axios.get("https://expense-wise-api.vercel.app/api/reports", {
+        // const response = await axios.get("http://localhost:5000/api/reports", {
           params: { email, month, type },
         });
+        console.log("API Response:", response.data);
         setReportData(response.data);
       } catch (error) {
-        console.error("Error fetching report data:", error);
-        setError("Failed to fetch report data.");
-      } finally {
-        setLoading(false); // Stop loading
+        console.error(
+          "Error fetching report data:",
+          error.response?.data || error.message
+        );
+        alert(error.response?.data?.message || "Failed to fetch report data.");
       }
     };
 
@@ -74,19 +70,18 @@ const Report = () => {
       return;
     }
 
-    setLoading(true); // Start loading
-    setError(null); // Reset error state
-
     try {
       const response = await axios.get("https://expense-wise-api.vercel.app/api/reports", {
+      // const response = await axios.get("http://localhost:5000/api/reports", {
         params: { email, month, type },
       });
       setReportData(response.data);
     } catch (error) {
-      console.error("Error fetching report data:", error);
-      setError("Failed to fetch report data.");
-    } finally {
-      setLoading(false); // Stop loading
+      console.error(
+        "Error fetching report data:",
+        error.response?.data || error.message
+      );
+      alert(error.response?.data?.message || "Failed to fetch report data.");
     }
   };
 
@@ -183,7 +178,7 @@ const Report = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        sx={{ display: "flex", gap: { xs: 1, sm: 1, md: 2 }, mb: 3 }}
+        sx={{ display: "flex", gap: {xs:1, sm:1, md:2}, mb: 3 }}
       >
         {/* Month Dropdown */}
         <TextField
@@ -299,103 +294,168 @@ const Report = () => {
         </Button>
       </Box>
 
-      {/* Loading and Error Messages */}
-      {loading && <CircularProgress />}
-      {error && <Alert severity="error">{error}</Alert>}
-
       {/* Report Table */}
-      <TableContainer
-        component={Paper}
-        sx={{
-          maxHeight: 400,
-          backgroundColor: "#282826",
-          border: "1px solid gray",
-        }}
-      >
-        <Table id="report-table" sx={{ minWidth: 650 }} stickyHeader>
+      <TableContainer component={Paper}>
+        <Table
+          id="report-table"
+          sx={{ backgroundColor: "#282826", border: "1px solid white" }}
+        >
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "#F78D6A", fontWeight: "bold" }}>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>
                 Date
               </TableCell>
-              <TableCell sx={{ color: "#F78D6A", fontWeight: "bold" }}>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>
+                Day
+              </TableCell>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>
+                Category
+              </TableCell>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>
                 Description
               </TableCell>
-              <TableCell sx={{ color: "#F78D6A", fontWeight: "bold" }}>
+              <TableCell sx={{ color: "#F78D6A", backgroundColor: "#383838" }}>
                 Amount
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell sx={{ color: "white" }}>
-                  {new Date(row.date).toLocaleDateString()}
+            {currentData.length > 0 ? (
+              <>
+                {currentData.map((item) => (
+                  <TableRow key={item._id}>
+                    <TableCell sx={{ color: "white" }}>
+                      {new Date(item.date).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell sx={{ color: "white" }}>{item.day}</TableCell>
+                    <TableCell sx={{ color: "white" }}>
+                      {item.category}
+                    </TableCell>
+                    <TableCell sx={{ color: "white" }}>
+                      {item.description}
+                    </TableCell>
+                    <TableCell sx={{ color: "white" }}>
+                      ₹ {item.amount}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {/* Total Row */}
+                <TableRow style={{ backgroundColor: "#383838" }}>
+                  <TableCell
+                    colSpan={4}
+                    align="right"
+                    style={{ fontWeight: "bold", color: "#F78D6A" }}
+                  >
+                    Total:
+                  </TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#F78D6A" }}>
+                    {calculateTotal()} Rs /-
+                  </TableCell>
+                </TableRow>
+              </>
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  No data found.
                 </TableCell>
-                <TableCell sx={{ color: "white" }}>{row.description}</TableCell>
-                <TableCell sx={{ color: "white" }}>{row.amount}</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Total Amount */}
-      <Box sx={{ marginTop: 2, color: "white", textAlign: "center" }}>
-        <Typography variant="h6">
-          Total Amount: {calculateTotal()}
-        </Typography>
-      </Box>
-
-      {/* Pagination */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
+      {/* Pagination and Print Button */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
         <Button
-          variant="text"
-          color="primary"
-          onClick={() => handleChangePage("previous")}
-          disabled={currentPage === 0}
-        >
-          <ArrowBackIos />
-        </Button>
-        <Typography variant="body2" sx={{ alignSelf: "center", color: "white" }}>
-          Page {currentPage + 1} of {Math.ceil(reportData.length / rowsPerPage)}
-        </Typography>
-        <Button
-          variant="text"
-          color="primary"
-          onClick={() => handleChangePage("next")}
-          disabled={currentPage >= Math.ceil(reportData.length / rowsPerPage) - 1}
-        >
-          <ArrowForwardIos />
-        </Button>
-      </Box>
-
-      {/* Rows per page */}
-      <Box sx={{ marginTop: 2 }}>
-        <TextField
-          label="Rows per page"
-          select
-          value={rowsPerPage}
-          onChange={handleRowsPerPageChange}
-          sx={{ backgroundColor: "#3e3e3e", color: "white", borderRadius: "5px", width: "20%" }}
-        >
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={15}>15</MenuItem>
-          <MenuItem value="all">All</MenuItem>
-        </TextField>
-      </Box>
-
-      {/* Print Button */}
-      <Box sx={{ marginTop: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
+          variant="outlined"
+          startIcon={<Print sx={{fontSize:{xs:4, md:8}}}/>}
           onClick={handlePrint}
-          sx={{ backgroundColor: "#F78D6A" }}
+          sx={{
+            bgcolor: "#282826",
+            color: "white",
+            borderColor: "#F78D6A",
+            "&:hover": { bgcolor: "#a3644e" },
+            fontSize:{xs:9, md:12}
+          }}
         >
-          <Print /> Print Report
+          Generate Report
         </Button>
+
+        <Box>
+          <Button>
+            <TextField
+              select
+              value={rowsPerPage}
+              onChange={handleRowsPerPageChange}
+              // sx={{ color: "white", marginRight: 2 }}
+              sx={{
+                color: "white",
+                marginRight: {xs:1, md:2},
+                "& .MuiOutlinedInput-root": {
+                  // "& fieldset": {
+                  //   borderColor: "gray", // Default border color
+                  // },
+                  "& .MuiSelect-select": {
+                    color: "white", // Ensures the default selected value appears white
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "gray", // Border color on hover
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "gray", // Border color when focused
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "gray", // Default label color
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "white", // Label color when focused
+                },
+              }}
+              SelectProps={{
+                MenuProps: {
+                  PaperProps: {
+                    sx: {
+                      backgroundColor: "#3e3e3e", // Dark background for dropdown
+                      color: "white", // White text
+                    },
+                  },
+                },
+              }}
+            >
+              {[3, 5, 10, 20].map((rows) => (
+                <MenuItem key={rows} value={rows}>
+                  {rows} rows
+                </MenuItem>
+              ))}
+              <MenuItem value="all" sx={{}}>Show All</MenuItem>{" "}
+              {/* Add Show All option */}
+            </TextField>
+          </Button>
+
+          <IconButton
+            onClick={() => handleChangePage("previous")}
+            disabled={currentPage === 0}
+            sx={{}}
+          >
+            <ArrowBackIos sx={{ color: "#F78D6A", fontSize:{xs:15, md:22} }} />
+          </IconButton>
+          <IconButton
+            onClick={() => handleChangePage("next")}
+            disabled={
+              currentPage >= Math.ceil(reportData.length / rowsPerPage) - 1
+            }
+          >
+            <ArrowForwardIos sx={{ color: "#F78D6A", fontSize:{xs:15, md:22} }} />
+          </IconButton>
+        </Box>
       </Box>
     </Box>
   );
