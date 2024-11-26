@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, TextField, Button, Typography, MenuItem, Alert } from "@mui/material";
+import { Box, TextField, Button, Typography, MenuItem, Alert, Snackbar } from "@mui/material";
 
 const Income = () => {
   const [formData, setFormData] = useState({
@@ -63,19 +63,22 @@ const Income = () => {
     >
       {/* Global Alert Header */}
       {alert && (
-        <Alert
-          severity={alert.severity}
-          variant="outlined"
-          sx={{
-            position: "fixed",
-            top: 0,
-            width: "30%",
-            zIndex: 1200, // Ensure it stays on top
-            textAlign: "center",
-          }}
+        <Snackbar
+          open={Boolean(alert)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          {alert.message}
-        </Alert>
+          <Alert
+            severity={alert.severity}
+            variant="outlined"
+            sx={{
+              width: "100%",
+              backgroundColor: "#383838", // Optional: Match form styling
+              color: "white",
+            }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
       )}
 
       <Box
