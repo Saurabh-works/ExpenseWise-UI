@@ -58,8 +58,27 @@ const Login = () => {
           minHeight: "100vh",
           bgcolor: "#282826",
           padding: { xs: "5%", sm: "3%", md: "2%" },
+          position: "relative", // Enable absolute positioning for the alert
         }}
       >
+        {/* Alert message at the top-center */}
+        {alertMessage && (
+          <Alert
+            severity={alertSeverity} // 'success' or 'error'
+            sx={{
+              position: "absolute",
+              top: "10%",
+              left: "50%",
+              transform: "translateX(-50%)", // Center it horizontally
+              width: "80%", // You can adjust width as needed
+              fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+              zIndex: 1, // Ensure it's above other elements
+            }}
+          >
+            {alertMessage}
+          </Alert>
+        )}
+
         <Typography
           variant="h4"
           color="#F78D6A"
@@ -123,21 +142,6 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             sx={{ input: { color: "#ffffff" }, bgcolor: "#4A4A4A", borderRadius: 1 }}
           />
-
-          {alertMessage && (
-            <Alert
-              severity={alertSeverity} // 'success' or 'error'
-              sx={{
-                mt: 2,
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" }, // responsive font size
-              }}
-            >
-              {alertMessage}
-            </Alert>
-          )}
 
           <Button
             variant="contained"
