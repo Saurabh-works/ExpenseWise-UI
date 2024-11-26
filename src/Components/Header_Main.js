@@ -47,7 +47,7 @@ const Header_Main = ({ toggleSidebar }) => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold", color: "#F78D6A", marginLeft:{xs:"2px", md:"10px"}, fontSize:{xs:"100%", md:"150%"} }}
+                sx={{ fontWeight: "bold", color: "white", marginLeft:{xs:"2px", md:"10px"}, fontSize:{xs:"100%", md:"150%"} }}
               >
                 <span style={{ color: "#F78D6A" }}>Expense</span>Wise
               </Typography>
