@@ -16,6 +16,9 @@ const CurrentMonthPie = () => {
   const [error, setError] = useState(null); // Error state
   const email = localStorage.getItem("userData");
 
+  // Auto-close duration for the alert (in milliseconds)
+  const ALERT_AUTO_CLOSE_DURATION = 5000;
+
   // Category colors for the pie chart
   const categoryColors = {
     Housing: "#FF6384",
@@ -95,10 +98,10 @@ const CurrentMonthPie = () => {
       console.error("Error fetching current month data:", error.response?.data || error.message);
       setError("Failed to load data. Please try again.");
 
-      // Auto-close error alert after 5 seconds
+      // Automatically clear the error after ALERT_AUTO_CLOSE_DURATION
       setTimeout(() => {
         setError(null);
-      }, 5000);
+      }, ALERT_AUTO_CLOSE_DURATION);
     } finally {
       setLoading(false); // Stop loading
     }
