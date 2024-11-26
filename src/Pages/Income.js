@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Box, TextField, Button, Typography, MenuItem, Alert } from "@mui/material";
 
@@ -10,47 +10,23 @@ const Income = () => {
     description: "",
     amount: "",
   });
-  const [error, setError] = useState(null); // To store error messages
-  const [isSubmitting, setIsSubmitting] = useState(false); // For disabling submit button during submission
-
-  // Function to get the day of the week based on date
-  const getDayOfWeek = (date) => {
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const dayIndex = new Date(date).getDay();
-    return days[dayIndex];
-  };
-
-  // Auto-fill day when date changes
-  useEffect(() => {
-    if (formData.date) {
-      const day = getDayOfWeek(formData.date);
-      setFormData((prevData) => ({ ...prevData, day }));
-    }
-  }, [formData.date]);
+  const [alert, setAlert] = useState(null); // To handle success or error messages
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { date, day, category, description, amount } = formData;
-    const email = localStorage.getItem("userData");
-
-    // Simple validation: Ensure all fields are filled out
-    if (!date || !day || !category || !description || !amount) {
-      setError("All fields are required.");
-      return;
-    }
-
-    if (amount <= 0) {
-      setError("Amount must be a positive number.");
-      return;
-    }
-
-    setError(null); // Reset error state if validation passes
-    setIsSubmitting(true); // Disable the submit button while submitting
+    const email = localStorage.getItem("userData"); // Get email from localStorage
 
     try {
-      await axios.post("https://expense-wise-api.vercel.app/api/incomes/add", { ...formData, email });
-      // await axios.post("http://localhost:5000/api/incomes/add", { ...formData, email });
-      alert("Income added successfully!");
+      // Send the form data to the backend
+      await axios.post("https://expense-wise-api.vercel.app/api/incomes/add", {
+        ...formData,
+        email,
+      });
+
+      // Set success alert
+      setAlert({ message: "Income added successfully!", severity: "success" });
+
+      // Reset form data
       setFormData({
         date: "",
         day: "",
@@ -59,22 +35,10 @@ const Income = () => {
         amount: "",
       });
     } catch (error) {
-      console.error("Error adding income:", error.response || error.message || error);
-      setError(error.response?.data?.message || "Failed to add income.");
-    } finally {
-      setIsSubmitting(false); // Re-enable the submit button after submission
+      console.error("Error adding income:", error);
+      // Set error alert
+      setAlert({ message: "Failed to add income.", severity: "error" });
     }
-  };
-
-  const handleReset = () => {
-    setFormData({
-      date: "",
-      day: "",
-      category: "",
-      description: "",
-      amount: "",
-    });
-    setError(null); // Reset any error messages
   };
 
   return (
@@ -93,9 +57,9 @@ const Income = () => {
         onSubmit={handleSubmit}
         sx={{
           padding: { xs: 3, sm: 4, md: 5 },
-          backgroundColor: "#383838",
-          width: { xs: "90%", sm: "70%", md: "40%" },
+          width: { xs: "90%", sm: "70%", md: "400px" },
           borderRadius: 2,
+          backgroundColor: "#383838",
           boxShadow: 3,
         }}
       >
@@ -111,35 +75,38 @@ const Income = () => {
           }}
         >
           <span style={{ borderBottom: "1px solid #F78D6A", margin: "auto", paddingBottom: "2px" }}>
-            {" "}
             Add Income
           </span>
         </Typography>
 
-        {/* Error Message */}
-        {error && <Alert severity="error" sx={{ marginBottom: 2 }}>{error}</Alert>}
+        {/* Display Alert Message */}
+        {alert && (
+          <Alert severity={alert.severity} sx={{ marginBottom: 2 }}>
+            {alert.message}
+          </Alert>
+        )}
 
         {/* Date Input */}
         <TextField
           label="Date"
           type="date"
           fullWidth
-          margin="normal"
-          sx={responsiveInputStyle}
           InputLabelProps={{ shrink: true }}
+          margin="normal"
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          sx={responsiveInputStyle}
         />
 
-        {/* Day Dropdown (auto-filled based on date) */}
+        {/* Day Dropdown */}
         <TextField
           label="Day"
           select
           fullWidth
           margin="normal"
-          sx={responsiveInputStyle}
           value={formData.day}
-          disabled // Disable day input, as it is auto-filled
+          onChange={(e) => setFormData({ ...formData, day: e.target.value })}
+          sx={responsiveInputStyle}
         >
           {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
             <MenuItem key={day} value={day}>
@@ -154,19 +121,9 @@ const Income = () => {
           select
           fullWidth
           margin="normal"
-          sx={responsiveInputStyle}
           value={formData.category}
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                sx: {
-                  backgroundColor: "#3e3e3e",
-                  color: "white",
-                },
-              },
-            },
-          }}
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          sx={responsiveInputStyle}
         >
           {["Salary", "Borrowing Money", "Side Income", "Other"].map((category) => (
             <MenuItem key={category} value={category}>
@@ -180,9 +137,9 @@ const Income = () => {
           label="Description"
           fullWidth
           margin="normal"
-          sx={responsiveInputStyle}
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          sx={responsiveInputStyle}
         />
 
         {/* Amount Input */}
@@ -191,9 +148,9 @@ const Income = () => {
           type="number"
           fullWidth
           margin="normal"
-          sx={responsiveInputStyle}
           value={formData.amount}
           onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+          sx={responsiveInputStyle}
         />
 
         {/* Submit Button */}
@@ -202,60 +159,40 @@ const Income = () => {
           variant="contained"
           fullWidth
           sx={{
-            marginTop: 3,
             bgcolor: "#F78D6A",
-            color: "white",
+            color: "#ffffff",
             fontWeight: "bold",
+            mt: 3,
+            paddingY: 1,
+            fontSize: { xs: "0.9rem", sm: "1rem" },
             "&:hover": { bgcolor: "#a3644e" },
-            paddingY: { xs: 1, sm: 1.2 },
-            fontSize: { xs: "0.9rem", sm: "1rem" },
           }}
-          disabled={isSubmitting} // Disable submit button while submitting
         >
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
-
-        {/* Reset Button */}
-        <Button
-          type="button"
-          variant="outlined"
-          fullWidth
-          sx={{
-            marginTop: 2,
-            color: "white",
-            borderColor: "#F78D6A",
-            fontWeight: "bold",
-            "&:hover": { borderColor: "#a3644e", color: "#a3644e" },
-            paddingY: { xs: 1, sm: 1.2 },
-            fontSize: { xs: "0.9rem", sm: "1rem" },
-          }}
-          onClick={handleReset}
-        >
-          Reset
+          Submit
         </Button>
       </Box>
     </Box>
   );
 };
 
-// Reusable Styles for Inputs
+// Reusable Input Style
 const responsiveInputStyle = {
   "& .MuiOutlinedInput-root": {
     "& input": {
-      color: "white",
+      color: "white", // Input text color
     },
     "&:hover fieldset": {
-      borderColor: "gray",
+      borderColor: "gray", // Border color on hover
     },
     "&.Mui-focused fieldset": {
-      borderColor: "gray",
+      borderColor: "gray", // Border color when focused
     },
   },
   "& .MuiInputLabel-root": {
-    color: "gray",
+    color: "gray", // Default label color
   },
   "& .MuiInputLabel-root.Mui-focused": {
-    color: "white",
+    color: "white", // Label color when focused
   },
 };
 
