@@ -198,6 +198,9 @@ const Income = () => {
 // Reusable Input Style
 const responsiveInputStyle = {
   "& .MuiOutlinedInput-root": {
+    "& .MuiSelect-select": {
+                    color: "white", // Ensures the default selected value appears white
+                  },
     "& input": {
       color: "white", // Input text color
     },
