@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import vid from "../Assets/Black Hat 3D Animated Icon (2).mp4";
-import { Box, TextField, Button, Typography, Container } from "@mui/material";
+import { Box, TextField, Button, Typography, Container, Alert } from "@mui/material";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,8 @@ const Login = () => {
       // Check for success message
       if (response.data.message === "Login successful") {
         navigate("/dashboard"); // Navigate to dashboard on successful login
-        alert("Login is Successful....");
+        // alert("Login is Successful....");
+        <Alert severity="success">This is a success Alert.</Alert>
         localStorage.setItem("userData", email);
       } else {
         setErrorMessage(response.data.message || "An error occurred during login.");
