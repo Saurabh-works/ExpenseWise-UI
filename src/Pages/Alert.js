@@ -135,7 +135,7 @@ const Alert = () => {
   return (
     <Box sx={{ padding: 4, color: "white" }}>
       <Typography variant="h5" sx={{ mb: 3, color: "white" }}>
-        <span style={{borderBottomColor:"#F78D6A"}} >Schedule Alerts</span>
+        <span style={{borderBottom:"1px solid #F78D6A"}} >Schedule Alerts</span>
       </Typography>
       <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
         <TextField
@@ -225,8 +225,8 @@ const Alert = () => {
         {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Schedule Alert"}
       </Button>
 
-      <Typography variant="h6" sx={{ mt: 4, mb: 2, color: "#F78D6A" }}>
-      <span style={{borderBottomColor:"#F78D6A"}} >Alerts History:</span>
+      <Typography variant="h6" sx={{ mt: 4, mb: 2, color: "white" }}>
+      <span style={{borderBottom:"1px solid #F78D6A"}} >Alerts History:</span>
       </Typography>
       <TableContainer component={Paper} sx={{ backgroundColor: "#2c2c2c", color: "white" }}>
         <Table>
