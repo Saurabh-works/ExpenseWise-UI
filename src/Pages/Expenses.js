@@ -21,7 +21,8 @@ const Expenses = () => {
         ...formData,
         email,
       });
-      alert("Expense added successfully!");
+      // alert("Expense added successfully!");
+      <Alert severity="success">Expense added successfully!</Alert>
       setFormData({
         date: "",
         day: "",
@@ -31,7 +32,9 @@ const Expenses = () => {
       });
     } catch (error) {
       console.error("Error adding expense:", error);
-      alert("Failed to add expense.");
+      // alert("Failed to add expense.");
+      <Alert severity="error">Failed to add expense</Alert>
+
     }
   };
 

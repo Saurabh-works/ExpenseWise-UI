@@ -33,7 +33,7 @@ const Login = () => {
       if (response.data.message === "Login successful") {
         navigate("/dashboard"); // Navigate to dashboard on successful login
         // alert("Login is Successful....");
-        <Alert severity="success">This is a success Alert.</Alert>
+        <Alert severity="success">Login is Successful....</Alert>
         localStorage.setItem("userData", email);
       } else {
         setErrorMessage(response.data.message || "An error occurred during login.");
