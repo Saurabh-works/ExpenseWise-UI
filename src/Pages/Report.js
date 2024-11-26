@@ -435,7 +435,7 @@ const Report = () => {
                   {rows} rows
                 </MenuItem>
               ))}
-              <MenuItem value="all" sx={{}}>Show All</MenuItem>{" "}
+              <MenuItem value="all">Show All</MenuItem>{" "}
               {/* Add Show All option */}
             </TextField>
           </Button>
@@ -445,7 +445,7 @@ const Report = () => {
             disabled={currentPage === 0}
             sx={{}}
           >
-            <ArrowBackIos sx={{ color: "#F78D6A", fontSize:{xs:15, md:22} }} />
+            <ArrowBackIos sx={{ color: "#F78D6A", fontSize:{xs:12, md:22} }} />
           </IconButton>
           <IconButton
             onClick={() => handleChangePage("next")}
@@ -453,7 +453,7 @@ const Report = () => {
               currentPage >= Math.ceil(reportData.length / rowsPerPage) - 1
             }
           >
-            <ArrowForwardIos sx={{ color: "#F78D6A", fontSize:{xs:15, md:22} }} />
+            <ArrowForwardIos sx={{ color: "#F78D6A", fontSize:{xs:12, md:22} }} />
           </IconButton>
         </Box>
       </Box>
