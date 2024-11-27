@@ -24,7 +24,7 @@ const SignUp = () => {
         password,
       });
 
-      if (response.data.message === "User created successfully") {
+      if (response.data.message === "User created successfully and email sent!") {
         setAlertMessage("Sign Up Successful!");
         setAlertSeverity("success");
         navigate("/login");
