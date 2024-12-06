@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import vid from "../Assets/Black Hat 3D Animated Icon (2).mp4";
-import { Box, TextField, Button, Typography, Container, Alert } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Alert,
+} from "@mui/material";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +25,13 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("https://expense-wise-api.vercel.app/api/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://expense-wise-api.vercel.app/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       // Check for success message
       if (response.data.message === "Login successful") {
@@ -30,7 +40,9 @@ const Login = () => {
         navigate("/dashboard");
         localStorage.setItem("userData", email);
       } else {
-        setAlertMessage(response.data.message || "An error occurred during login.");
+        setAlertMessage(
+          response.data.message || "An error occurred during login."
+        );
         setAlertSeverity("error");
       }
     } catch (error) {
@@ -130,8 +142,33 @@ const Login = () => {
             margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            sx={{ input: { color: "#ffffff" }, bgcolor: "#4A4A4A", borderRadius: 1 }}
+            sx={{
+              input: {
+                color: "#ffffff", // Default text color
+              },
+              "& .MuiFilledInput-root": {
+                bgcolor: "#4A4A4A", // Background color
+                borderRadius: 1, // Rounded corners
+                // border: "1px solid transparent", // Initial border
+                "&:hover": {
+                  bgcolor: "#5A5A5A", // Background on hover
+                },
+                ":before": {
+                  borderBottomColor: "#555", // Default underline color
+                },
+                ":after": {
+                  borderBottomColor: "#F78D6A", // Focused underline color
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#c7c7c7", // Label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#ffffff", // Label color on focus
+              },
+            }}
           />
+
           <TextField
             label="Password"
             type="password"
@@ -140,7 +177,31 @@ const Login = () => {
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            sx={{ input: { color: "#ffffff" }, bgcolor: "#4A4A4A", borderRadius: 1 }}
+            sx={{
+              input: {
+                color: "#ffffff", // Default text color
+              },
+              "& .MuiFilledInput-root": {
+                bgcolor: "#4A4A4A", // Background color
+                borderRadius: 1, // Rounded corners
+                border: "1px solid transparent", // Initial border
+                "&:hover": {
+                  bgcolor: "#5A5A5A", // Background on hover
+                },
+                ":before": {
+                  borderBottomColor: "#555", // Default underline color
+                },
+                ":after": {
+                  borderBottomColor: "#F78D6A", // Focused underline color
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#c7c7c7", // Label color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#ffffff", // Label color on focus
+              },
+            }}
           />
 
           <Button

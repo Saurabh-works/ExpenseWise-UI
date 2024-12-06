@@ -11,8 +11,8 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alertMessage, setAlertMessage] = useState(""); // State for alert message
-  const [alertSeverity, setAlertSeverity] = useState(""); // State for alert severity
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,17 +46,16 @@ const SignUp = () => {
   return (
     <>
       <Box sx={{ position: "absolute", top: 0, width: "100%", zIndex: 1 }}>
-        {/* Alert message at the top-center, smaller, outlined */}
         {alertMessage && (
           <Alert
-            severity={alertSeverity} // 'success' or 'error'
-            variant="outlined" // Outlined variant
+            severity={alertSeverity}
+            variant="outlined"
             sx={{
-              width: "50%", // Smaller width
-              margin: "10px auto", // Center it with margin
-              fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Small font size
-              borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize border color based on severity
-              color: alertSeverity === "error" ? "#d32f2f" : "#388e3c", // Customize text color based on severity
+              width: "50%",
+              margin: "10px auto",
+              fontSize: { xs: "0.8rem", sm: "0.9rem" },
+              borderColor: alertSeverity === "error" ? "#d32f2f" : "#388e3c",
+              color: alertSeverity === "error" ? "#d32f2f" : "#388e3c",
             }}
           >
             {alertMessage}
@@ -131,8 +130,15 @@ const SignUp = () => {
             onChange={(e) => setName(e.target.value)}
             sx={{
               input: { color: "#ffffff" },
-              bgcolor: "#4A4A4A",
-              borderRadius: 1,
+              "& .MuiFilledInput-root": {
+                bgcolor: "#4A4A4A",
+                borderRadius: 1,
+                "&:hover": { bgcolor: "#5A5A5A" },
+                ":before": { borderBottomColor: "#555" },
+                ":after": { borderBottomColor: "#F78D6A" },
+              },
+              "& .MuiInputLabel-root": { color: "#c7c7c7" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#ffffff" },
             }}
           />
           <TextField
@@ -144,8 +150,15 @@ const SignUp = () => {
             onChange={(e) => setEmail(e.target.value)}
             sx={{
               input: { color: "#ffffff" },
-              bgcolor: "#4A4A4A",
-              borderRadius: 1,
+              "& .MuiFilledInput-root": {
+                bgcolor: "#4A4A4A",
+                borderRadius: 1,
+                "&:hover": { bgcolor: "#5A5A5A" },
+                ":before": { borderBottomColor: "#555" },
+                ":after": { borderBottomColor: "#F78D6A" },
+              },
+              "& .MuiInputLabel-root": { color: "#c7c7c7" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#ffffff" },
             }}
           />
           <TextField
@@ -158,8 +171,15 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
             sx={{
               input: { color: "#ffffff" },
-              bgcolor: "#4A4A4A",
-              borderRadius: 1,
+              "& .MuiFilledInput-root": {
+                bgcolor: "#4A4A4A",
+                borderRadius: 1,
+                "&:hover": { bgcolor: "#5A5A5A" },
+                ":before": { borderBottomColor: "#555" },
+                ":after": { borderBottomColor: "#F78D6A" },
+              },
+              "& .MuiInputLabel-root": { color: "#c7c7c7" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#ffffff" },
             }}
           />
 
