@@ -21,9 +21,6 @@ const Report = () => {
   const currentMonth = new Date().getMonth() + 1; // Current month (1-based)
   const currentType = "expenses"; // Default type
 
-  const currentYear = new Date().getFullYear();
-const [year, setYear] = useState(currentYear);
-
   const [month, setMonth] = useState(currentMonth);
   const [type, setType] = useState(currentType);
   const [reportData, setReportData] = useState([]);
@@ -48,7 +45,7 @@ const [year, setYear] = useState(currentYear);
       try {
         const response = await axios.get("https://expense-wise-api.vercel.app/api/reports", {
         // const response = await axios.get("http://localhost:5000/api/reports", {
-          params: { email, month, year, type },
+          params: { email, month, type },
         });
         console.log("API Response:", response.data);
         setReportData(response.data);
@@ -62,7 +59,7 @@ const [year, setYear] = useState(currentYear);
     };
 
     fetchData();
-  }, [month, year, type]); // Trigger fetch when month or type changes
+  }, [month, type]); // Trigger fetch when month or type changes
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,7 +73,7 @@ const [year, setYear] = useState(currentYear);
     try {
       const response = await axios.get("https://expense-wise-api.vercel.app/api/reports", {
       // const response = await axios.get("http://localhost:5000/api/reports", {
-        params: { email, month, year, type },
+        params: { email, month, type },
       });
       setReportData(response.data);
     } catch (error) {
@@ -239,37 +236,6 @@ const [year, setYear] = useState(currentYear);
             </MenuItem>
           ))}
         </TextField>
-
-<TextField
-  label="Year"
-  select
-  fullWidth
-  value={year}
-  onChange={(e) => setYear(Number(e.target.value))}
-  sx={{
-    "& .MuiOutlinedInput-root": {
-      "&:hover fieldset": { borderColor: "gray" },
-      "& .MuiSelect-select": { color: "white" },
-      "&.Mui-focused fieldset": { borderColor: "gray" },
-    },
-    "& .MuiInputLabel-root": { color: "gray" },
-    "& .MuiInputLabel-root.Mui-focused": { color: "white" },
-  }}
-  SelectProps={{
-    MenuProps: {
-      PaperProps: { sx: { backgroundColor: "#3e3e3e", color: "white" } },
-    },
-  }}
->
-  {[...Array(5)].map((_, i) => {
-    const y = new Date().getFullYear() - i;
-    return (
-      <MenuItem key={y} value={y}>
-        {y}
-      </MenuItem>
-    );
-  })}
-</TextField>
 
         {/* Type Dropdown */}
         <TextField
