@@ -192,7 +192,8 @@ const MonthlySpends = () => {
             },
           }}
           value={year}
-          onChange={(e) => setYear(e.target.value)}
+          //onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => setYear(Number(e.target.value))}
         >
           {[...Array(5)].map((_, i) => {
             const y = new Date().getFullYear() - i;
